@@ -23,6 +23,11 @@ test('Metadata is explicit; unknown paths and duplicate keys are rejected',()=>{
   assert.throws(()=>parseDocument(raw.replace('draft: true','draft: "true"'),'test','notes'));
   assert.throws(()=>parseDocument(raw.replace('draft: true','draft: true\ndraft: false'),'test','notes'));
   assert(!validSlug('x/y'));assert(!validSlug('..'));assert(validSlug('my-story-2'));
+  assert(!validSlug(undefined));assert(!validSlug(null));
+});
+test('Headings in code fences do not create broken table-of-contents anchors',()=>{
+  const doc=parseDocument(newNote()+'\n```text\n## not a heading\n```\n\n## 실제 제목\n\n본문\n','headings','notes');
+  assert.equal(doc.toc.length,4);assert.equal(doc.toc[3].title,'실제 제목');assert.match(doc.html,/<h2 id="section-3">실제 제목/);
 });
 async function fixture(t) {const root=await mkdtemp(path.join(os.tmpdir(),'portfolio-test-'));t.after(()=>rm(root,{recursive:true,force:true}));for(const kind of ['cases','notes'])await mkdir(path.join(root,'content',kind),{recursive:true});return root;}
 test('Create, edit, backup, delete and draft exclusion operate on real files',async t=>{

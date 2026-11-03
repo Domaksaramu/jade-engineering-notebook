@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 export const kinds = ['cases', 'notes'];
-export const validSlug = slug => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) && slug.length <= 80;
+export const validSlug = slug => typeof slug==='string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) && slug.length <= 80;
 export const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function safeUrl(value) {
   return /^(?:https?:\/\/|mailto:|#|\.\.?\/|\/[^/])/.test(value) && !/[\x00-\x20\\]/.test(value) ? value : '#';
@@ -60,7 +60,13 @@ export function parseDocument(raw, slug, kind) {
   if(!Array.isArray(meta.tags)||meta.tags.some(t=>typeof t!=='string')) throw new Error(`${slug}: tags는 문자열 배열입니다.`);
   if(kind==='cases') for(const key of ['company','role','result','scope']) if(typeof meta[key]!=='string') throw new Error(`${slug}: ${key} 필수`);
   if(!match[2].trim()) throw new Error(`${slug}: 본문이 비어 있습니다.`);
-  const toc = [...match[2].matchAll(/^(#{2,4})\s+(.+)$/gm)].map((m,index)=>({title:m[2],id:`section-${index}`,level:m[1].length}));
+  const toc=[]; let inCode=false;
+  for(const line of match[2].split(/\r?\n/)) {
+    if(line.startsWith('```')) {inCode=!inCode;continue;}
+    if(inCode)continue;
+    const heading=/^(#{2,4})\s+(.+)$/.exec(line);
+    if(heading)toc.push({title:heading[2],id:`section-${toc.length}`,level:heading[1].length});
+  }
   return { ...meta, slug, kind, body:match[2], html:markdown(match[2]), toc, href:`${kind}/${slug}/`, minutes:Math.max(1,Math.ceil(match[2].length/650)) };
 }
 export async function loadContent(root, {drafts=false}={}) {

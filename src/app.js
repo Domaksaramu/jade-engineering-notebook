@@ -1,3 +1,4 @@
+document.querySelector('.note-search')?.addEventListener('submit',event=>event.preventDefault());
 const search = document.querySelector('#search');
 const notes = [...document.querySelectorAll('[data-note]')];
 let category = 'all';
