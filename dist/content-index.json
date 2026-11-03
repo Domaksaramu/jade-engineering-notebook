@@ -1,0 +1,69 @@
+[
+  {
+    "title": "CPU 급증에서 시작해, 인증 객체의 수명까지",
+    "summary": "서버가 멈추는 현상을 Heap·GC·인증 캐시의 연결 문제로 좁히고, 객체가 남는 경로를 고쳤습니다.",
+    "kind": "cases",
+    "slug": "auth-cache",
+    "category": "운영 안정성",
+    "tags": [
+      "Java",
+      "Spring Security",
+      "JVM",
+      "Heap Dump"
+    ],
+    "href": "cases/auth-cache/"
+  },
+  {
+    "title": "캐시를 넣는 코드보다, 비우는 경로를 먼저 보는 이유",
+    "summary": "인증 캐시 장애를 겪으며 정리한 객체 수명과 운영 관측의 질문들.",
+    "kind": "notes",
+    "slug": "object-lifetime",
+    "category": "장애에서 배운 것",
+    "tags": [
+      "JVM",
+      "운영 안정성"
+    ],
+    "href": "notes/object-lifetime/"
+  },
+  {
+    "title": "‘배포 성공’을 어디까지라고 부를 것인가",
+    "summary": "빌드, 기동, 요청 접수, 업무 완료를 나눠 보면 자동화해야 할 다음 단계가 보입니다.",
+    "kind": "notes",
+    "slug": "after-deployment",
+    "category": "운영의 기준",
+    "tags": [
+      "CI/CD",
+      "E2E",
+      "플랫폼"
+    ],
+    "href": "notes/after-deployment/"
+  },
+  {
+    "title": "외부 응답이 느리다는 말 대신, 내부의 반복을 줄였습니다",
+    "summary": "제휴 채널의 응답 제한 아래 전문 가공과 DB 접근 경로를 다시 보고, 반복 처리와 저장 경계를 정리했습니다.",
+    "kind": "cases",
+    "slug": "financial-integration",
+    "category": "성능과 연동",
+    "tags": [
+      "Java",
+      "Spring",
+      "Tibero",
+      "SQL"
+    ],
+    "href": "cases/financial-integration/"
+  },
+  {
+    "title": "배포 완료와 서비스 정상 사이의 빈칸을 메우는 일",
+    "summary": "ML 서비스의 배포, 결과 검증, 운영 리포트를 연결하며 담당자의 반복 확인을 줄이는 기반을 만들었습니다.",
+    "kind": "cases",
+    "slug": "platform-operations",
+    "category": "플랫폼과 자동화",
+    "tags": [
+      "Kubernetes",
+      "Helm",
+      "GitLab CI/CD",
+      "FastAPI"
+    ],
+    "href": "cases/platform-operations/"
+  }
+]

@@ -1,0 +1,8 @@
+node_modules/
+.site-workflow/
+.openai/*.tar.gz
+.openai/*.tgz
+artifacts/
+_private/
+.trash/
+.DS_Store
