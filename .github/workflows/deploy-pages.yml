@@ -1,5 +1,7 @@
 name: Deploy portfolio
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -10,6 +12,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -18,15 +22,23 @@ jobs:
           node-version: '22'
       - uses: actions/configure-pages@v5
         id: pages
+      - name: Check JavaScript syntax
+        run: |
+          for file in src/*.js src/*.mjs scripts/*.mjs tests/*.mjs; do
+            node --check "$file"
+          done
       - run: npm test
       - run: npm run build
         env:
           SITE_URL: ${{ steps.pages.outputs.base_url }}
       - run: npm run check
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
   deploy:
+    timeout-minutes: 10
     needs: build
     environment:
       name: github-pages

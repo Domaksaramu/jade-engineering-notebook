@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
-import { root } from './build.mjs';
+import { root, siteLocation } from './build.mjs';
 import { loadContent } from '../src/content.mjs';
 
 const base=path.join(root,'dist');
+const { prefix } = siteLocation();
 async function walk(folder) {const result=[];for(const name of await readdir(folder)){const file=path.join(folder,name);if((await stat(file)).isDirectory())result.push(...await walk(file));else result.push(file);}return result;}
 const files=await walk(base), pages=files.filter(f=>f.endsWith('.html'));let links=0;
 const docs=await loadContent(root,{drafts:true});
@@ -14,7 +15,9 @@ for(const page of pages) {
   assert(!/undefined|\[object Object\]|TODO|Lorem ipsum/.test(html),page+': placeholder');
   for(const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     const href=match[1];if(/^(https?:|mailto:|data:)/.test(href))continue;
-    const [url,fragment]=href.split('#');let file=url.startsWith('/')?path.join(base,url):path.resolve(path.dirname(page),url||'.');
+    const [url,fragment]=href.split('#');
+    if(url.startsWith('/'))assert(url.startsWith(prefix),href+': outside site prefix');
+    let file=url.startsWith('/')?path.join(base,url.slice(prefix.length)):path.resolve(path.dirname(page),url||'.');
     if(!url)file=page;
     if((await stat(file)).isDirectory())file=path.join(file,'index.html');
     assert(file.startsWith(base+path.sep),href+': outside dist');

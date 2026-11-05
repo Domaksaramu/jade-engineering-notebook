@@ -32,3 +32,9 @@ jobs:
         run: npm run build
       - name: Check links and publication boundaries
         run: npm run check
+      - name: Check GitHub project Pages paths
+        env:
+          SITE_URL: https://example.github.io/notebook
+        run: |
+          npm run build
+          npm run check
