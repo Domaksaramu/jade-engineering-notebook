@@ -1,0 +1,40 @@
+name: Validate notebook
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          for file in src/*.js src/*.mjs scripts/*.mjs tests/*.mjs; do
+            node --check "$file"
+          done
+      - name: Test content and local editor boundaries
+        run: npm test
+      - name: Build static site
+        run: npm run build
+      - name: Check links and publication boundaries
+        run: npm run check
+      - name: Check GitHub project Pages paths
+        env:
+          SITE_URL: https://example.github.io/notebook
+        run: |
+          npm run build
+          npm run check

@@ -44,7 +44,7 @@ WCAG 2.2 AA 지향, 검증되지 않은 준수 인증을 주장하지 않는다.
 Node 22+ 내장 모듈만 사용. 제3자 런타임 의존성 없음. 제한된 안전한 Markdown 문법을 지원하며 HTML은 이스케이프. 정적 dist는 호스팅 독립적. 로컬 에디터는 loopback bind, Host/Origin 검증, CSRF token, 200KB 제한, 경로 제한을 적용. 원본 자료·내부 코드·토큰을 배포하지 않는다. node:test와 링크/산출물 검사 후 데스크톱/모바일 브라우저 확인.
 
 ## Open questions
-- [ ] 사용자: 공개할 회사/고객사명과 수치의 승인 여부. 샘플은 owner-private 배포.
+- [x] 사용자: 현재 V1 내용의 GitHub Pages 공개 배포 승인. 이후 추가 글은 별도 사실/기밀 검토.
 - [ ] 사용자: 기존 블로그 글과 URL 이관 범위. 이번에는 기존 링크를 유지.
-- [ ] 사용자: 최종 공개 도메인/호스팅 결정. 무료 후보는 GitHub Pages; 개인 샘플은 Sites private preview.
+- [x] 사용자: 2026-11-06 GitHub Pages 무료 배포와 저장소 공개 전환 승인. 기존 Sites private preview와 블로그는 유지.
 - [ ] 사용자: 자동 발행을 허용할지. 현재 기본은 초안 생성 + 검증 + 사람이 공개 전 확인.
