@@ -2,10 +2,16 @@
 
 ## 현재 상태
 - V1 기준본은 `v1.0.0` 태그/릴리스로 보존한다.
-- GitHub Pages 대상 주소: https://domaksaramu.github.io/jade-engineering-notebook/ (배포 결과는 Actions에서 확인).
+- GitHub Pages 대상 주소: https://jade-builds.github.io/blogs/ (배포 결과는 Actions에서 확인).
 - 2026-11-06 사용자 승인으로 저장소를 공개 전환하고 Pages의 GitHub Actions 배포를 활성화했다. 원본·커밋 이력·커밋한 초안도 공개된다.
 - Pages가 활성화되어 있으므로 `main` 변경 또는 `Deploy portfolio` 수동 실행으로 배포한다. 다른 브랜치에서 수동 실행하면 배포를 건너뛴다.
 - GitHub Actions는 정적 `dist/`만 배포한다. `/studio/`와 쓰기 API는 로컬 전용이다.
+
+## 저장소 주소 변경
+- 원본: https://github.com/jade-builds/blogs
+- 기존 체크아웃은 `git remote set-url origin https://github.com/jade-builds/blogs.git`으로 갱신한다.
+- 과거 Pages 주소의 자동 리다이렉트는 전제하지 않는다. 공유한 링크도 새 주소로 수정한다.
+- V1 태그와 Git 이력은 이름 변경 전후 동일하게 보존한다.
 
 ## 1. 초안
 ```sh

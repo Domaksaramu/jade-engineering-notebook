@@ -1,2 +1,2 @@
 User-agent: *
-Disallow: /studio/
+Disallow: /blogs/studio/

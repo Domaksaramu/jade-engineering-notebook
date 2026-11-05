@@ -44,4 +44,12 @@
 - 사용자 승인에 따라 저장소 visibility=public을 확인했다.
 - GitHub Pages를 build_type=workflow로 활성화하고 배포 주소를 확인했다.
 - Git 전체 추적 이력의 알려진 자격증명 패턴 검사는 통과했다. 포괄적인 기밀 감사를 대신하지 않는다.
-- main 병합 및 배포 후 실제 검증 결과는 PR #1의 완료 기록을 참고한다: https://github.com/Domaksaramu/jade-engineering-notebook/pull/1
+- main 병합 및 배포 후 실제 검증 결과는 PR #1의 완료 기록을 참고한다: https://github.com/jade-builds/blogs/pull/1
+
+
+### 사용자명·저장소 이름 변경
+- 사용자명 jade-builds를 API에서 확인하고 동일 저장소 ID를 유지한 채 blogs로 변경했다.
+- origin을 https://github.com/jade-builds/blogs.git으로 갱신했다.
+- 기본 빌드의 RSS/sitemap/404 경로는 https://jade-builds.github.io/blogs 기준이다.
+- 로컬 개발 서버는 / 경로를 유지하도록 분리하고 회귀 검사를 추가했다.
+- main push 후 실제 새 주소 검증 결과는 PR #1의 후속 완료 기록에 남긴다.

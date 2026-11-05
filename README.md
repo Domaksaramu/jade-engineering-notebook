@@ -11,7 +11,7 @@
 - GitHub Pages 정적 배포 workflow (활성화 후 main 자동 배포·수동 실행). 저장소는 사용자 승인으로 공개 전환했습니다. Pages를 활성화했으며 기존 블로그는 변경하지 않습니다.
 
 ## 버전 기준
-- 저장소: https://github.com/Domaksaramu/jade-engineering-notebook
+- 저장소: https://github.com/jade-builds/blogs
 - 사용자 승인 기준본: `v1.0.0`. 현재 디자인과 본문을 고정합니다.
 - 이후 작업은 별도 브랜치에서 검증하고, V1 태그는 이동하지 않습니다.
 - 변경 기록: [CHANGELOG.md](CHANGELOG.md).
@@ -22,8 +22,8 @@
 Node.js 22 이상만 필요합니다. 의존성 설치가 필요하지 않습니다.
 
 ```sh
-git clone https://github.com/Domaksaramu/jade-engineering-notebook.git
-cd jade-engineering-notebook
+git clone https://github.com/jade-builds/blogs.git
+cd blogs
 npm run dev
 ```
 
@@ -67,9 +67,9 @@ draft: true
 AGENTS.md와 docs/automation.md에 초안 생성·검증·발행 분리 규칙이 있습니다. 이 샘플에는 예약 작업이나 외부 블로그 자동 발행을 연결하지 않았습니다. API 키도 필요하지 않습니다.
 
 ## 배포
-정적 산출물은 `dist/`뿐입니다. `SITE_URL=https://your-domain.example npm run build`로 RSS 절대 주소와 sitemap을 생성합니다. URL 미지정 시 샘플 Sites 주소를 사용합니다. 로컬 에디터, 원천 자료, 백업과 쓰기 API는 배포되지 않습니다.
+정적 산출물은 `dist/`뿐입니다. `SITE_URL=https://your-domain.example npm run build`로 RSS 절대 주소와 sitemap을 생성합니다. URL 미지정 시 https://jade-builds.github.io/blogs 주소를 사용합니다. 로컬 미리보기의 탐색 경로는 /로 유지합니다. 로컬 에디터, 원천 자료, 백업과 쓰기 API는 배포되지 않습니다.
 
-GitHub Pages: 공개 저장소와 GitHub Actions 배포를 사용합니다. 배포 주소는 https://domaksaramu.github.io/jade-engineering-notebook/ 이며 배포 완료 여부는 Actions에서 확인합니다. 처음 구성할 때는 Settings → Pages → Source를 GitHub Actions로 지정한 뒤, Actions의 Deploy portfolio를 main에서 수동 실행합니다. 이후 main 변경은 자동 배포됩니다. 사용자 사이트와 프로젝트 하위 경로 모두 상대 링크로 동작합니다. 첫 저장소 생성·공개 전 기밀 검토가 필요합니다. [GitHub 공식 안내](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)에 따르면 GitHub Free의 public 저장소에서 Pages를 사용할 수 있습니다. 무료 범위·제한은 변경될 수 있으므로 최종 호스팅 선택 시 확인하세요.
+GitHub Pages: 공개 저장소와 GitHub Actions 배포를 사용합니다. 배포 주소는 https://jade-builds.github.io/blogs/ 이며 배포 완료 여부는 Actions에서 확인합니다. 처음 구성할 때는 Settings → Pages → Source를 GitHub Actions로 지정한 뒤, Actions의 Deploy portfolio를 main에서 수동 실행합니다. 이후 main 변경은 자동 배포됩니다. 사용자 사이트와 프로젝트 하위 경로 모두 상대 링크로 동작합니다. 첫 저장소 생성·공개 전 기밀 검토가 필요합니다. [GitHub 공식 안내](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)에 따르면 GitHub Free의 public 저장소에서 Pages를 사용할 수 있습니다. 무료 범위·제한은 변경될 수 있으므로 최종 호스팅 선택 시 확인하세요.
 
 Sites의 owner-private 샘플 배포와 GitHub Pages의 public 배포는 서로 별개입니다. 지금 만든 것은 샘플이며 기존 블로그 교체가 아닙니다.
 

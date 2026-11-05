@@ -23,6 +23,7 @@ test('HTTP flow: read, new draft, preview, save, publish locally, delete, and re
   assert.equal((await post('new',{slug:'http-sample'})).status,201);
   const draft=await (await get('/api/document?kind=notes&slug=http-sample')).json();assert.match(draft.raw,/draft: true/);
   assert.equal((await get('/notes/http-sample/')).status,404);
+  assert.match(await (await get('/missing/deep/path')).text(), /href="\/style.css"/);
   const raw=newNote('HTTP 수정 확인').replace('draft: true','draft: false');
   const input={kind:'notes',slug:'http-sample',raw};
   assert.equal((await post('save',input,{Origin:'https://foreign.example'})).status,403);

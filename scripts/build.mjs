@@ -5,7 +5,7 @@ import { loadContent, escape as e } from '../src/content.mjs';
 import { home, article, writing, shell } from '../src/pages.mjs';
 
 export const root = fileURLToPath(new URL('../',import.meta.url));
-export function siteLocation(value=process.env.SITE_URL || 'https://jaewon-engineering-notebook.zippy-lemon-4060.chatgpt.site') {
+export function siteLocation(value=process.env.SITE_URL || 'https://jade-builds.github.io/blogs') {
   const url = new URL(value);
   if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {
     throw new Error('SITE_URL은 인증 정보·쿼리·fragment 없는 https 사이트 주소여야 합니다.');
@@ -13,8 +13,9 @@ export function siteLocation(value=process.env.SITE_URL || 'https://jaewon-engin
   const prefix = url.pathname.replace(/\/$/, '') + '/';
   return { address: url.origin + prefix.replace(/\/$/, ''), prefix };
 }
-export async function build({projectRoot=root, output=path.join(projectRoot,'dist'), siteUrl}={}) {
-  const { address: origin, prefix } = siteLocation(siteUrl);
+export async function build({projectRoot=root, output=path.join(projectRoot,'dist'), siteUrl, localPreview=false}={}) {
+  const { address: origin, prefix: publishedPrefix } = siteLocation(siteUrl);
+  const prefix = localPreview ? '/' : publishedPrefix;
   const docs=await loadContent(projectRoot);
   if(docs.filter(d=>d.kind==='cases').length<1) throw new Error('공개 사례가 1개 이상 필요합니다.');
   await rm(output,{recursive:true,force:true}); await mkdir(output,{recursive:true});

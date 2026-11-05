@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 사용자명 jade-builds 및 저장소 blogs로 이전. 배포 주소 https://jade-builds.github.io/blogs/, 원본·로컬 remote·문서·RSS/sitemap 경로 갱신.
+
 - GitHub Pages 활성화 후 main 자동 배포, 다른 브랜치 배포 방지.
 - 프로젝트 하위 경로의 404·자산·RSS·sitemap 검사.
 - `npm run content:status`, 초안·검토·발행·회수 절차 및 콘텐츠 후속 계획.

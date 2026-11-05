@@ -60,3 +60,12 @@ test('Content status lists drafts without building or changing their source', as
   assert.equal(await readFile(file, 'utf8'), raw);
   await assert.rejects(stat(path.join(folder, 'dist')));
 });
+
+test('Local preview keeps root 404 navigation while feeds retain the renamed production URL', async t => {
+  const folder = await fixture(t);
+  await build({ projectRoot: folder, siteUrl: 'https://jade-builds.github.io/blogs/', localPreview: true });
+  const html = await readFile(path.join(folder, 'dist/404.html'), 'utf8');
+  assert.match(html, /href="\/style.css"/);
+  assert.match(html, /href="\/">홈으로 돌아가기/);
+  assert.match(await readFile(path.join(folder, 'dist/feed.xml'), 'utf8'), /https:\/\/jade-builds.github.io\/blogs\/notes\//);
+});

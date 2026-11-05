@@ -22,8 +22,8 @@ export function allowedRequest(req,port,{write=false,token}={}) {
 }
 export async function startServer({projectRoot=root,port=Number(process.env.PORT||4321)}={}) {
   if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('PORT는 1024~65535 정수여야 합니다.');
-  const token=randomBytes(32).toString('hex');await build({projectRoot});let queue=Promise.resolve();
-  const rebuild=()=>{queue=queue.catch(()=>{}).then(()=>build({projectRoot}));return queue;};
+  const token=randomBytes(32).toString('hex');await build({projectRoot,localPreview:true});let queue=Promise.resolve();
+  const rebuild=()=>{queue=queue.catch(()=>{}).then(()=>build({projectRoot,localPreview:true}));return queue;};
   const send=(res,status,body,type='application/json')=>{res.writeHead(status,{'Content-Type':type+'; charset=utf-8','X-Content-Type-Options':'nosniff','Cache-Control':'no-store','Referrer-Policy':'no-referrer','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"});res.end(type==='application/json'&&!Buffer.isBuffer(body)?JSON.stringify(body):body);};
   const server=http.createServer(async(req,res)=>{
     if(!allowedRequest(req,port))return send(res,403,{error:'로컬 same-origin 요청만 허용합니다.'});
