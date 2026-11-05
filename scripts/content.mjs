@@ -11,7 +11,7 @@ export async function createNote(root,slug) {const file=await documentPath(root,
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
   const slug=process.argv[2];if(slug==='--list') {
     const docs=await loadContent(fileURLToPath(new URL('../',import.meta.url)),{drafts:true});
-    for(const doc of docs) console.log(`${doc.draft?'DRAFT (not deployed)':'PUBLISHED'} | ${doc.href} | ${doc.title}`);
+    for(const doc of docs) console.log(`${doc.draft?'DRAFT (not deployed)':'READY (included in build)'} | ${doc.href} | ${doc.title}`);
     console.log('draft:true는 사이트 빌드에서만 제외됩니다. 공개 저장소에 커밋하면 원문은 공개됩니다.');
   }else if(!slug){console.error('사용법: npm run new -- my-next-story');process.exitCode=1;}else{try{console.log(await createNote(fileURLToPath(new URL('../',import.meta.url)),slug));}catch(error){console.error(error.message);process.exitCode=1;}}
 }

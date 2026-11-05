@@ -15,6 +15,8 @@ git switch -c writing/my-next-story
 npm run new -- my-next-story
 npm run dev
 ```
+`content:status`의 READY는 빌드 대상이라는 뜻이며 실제 외부 배포 완료를 뜻하지 않는다.
+
 `content/notes/my-next-story.md`를 텍스트 에디터 또는 로컬 `/studio/`에서 작성한다. 아직 사이트에 내보내지 않을 때는 `draft: true`를 유지한다.
 
 **중요:** draft는 사이트에서만 제외된다. 저장소가 공개되면 커밋한 Markdown 초안과 과거 이력도 공개된다. 비공개 메모·원천 자료는 이 저장소에 넣지 않는다. `.trash/`는 로컬 복구용이며 커밋하지 않는다.

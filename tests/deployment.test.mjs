@@ -55,7 +55,7 @@ test('Content status lists drafts without building or changing their source', as
   await writeFile(file, raw);
   const { stdout } = await promisify(execFile)(process.execPath, [path.join(folder, 'scripts/content.mjs'), '--list']);
   assert.match(stdout, /DRAFT \(not deployed\) \| notes\/private-draft\//);
-  assert.match(stdout, /PUBLISHED \| cases\/auth-cache\//);
+  assert.match(stdout, /READY \(included in build\) \| cases\/auth-cache\//);
   assert.match(stdout, /공개 저장소에 커밋하면 원문은 공개/);
   assert.equal(await readFile(file, 'utf8'), raw);
   await assert.rejects(stat(path.join(folder, 'dist')));
