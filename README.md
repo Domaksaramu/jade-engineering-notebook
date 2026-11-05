@@ -15,6 +15,8 @@
 - 사용자 승인 기준본: `v1.0.0`. 현재 디자인과 본문을 고정합니다.
 - 이후 작업은 별도 브랜치에서 검증하고, V1 태그는 이동하지 않습니다.
 - 변경 기록: [CHANGELOG.md](CHANGELOG.md).
+- 후속 작업과 선택 사항: [docs/next-steps.md](docs/next-steps.md).
+- `.github/workflows/validate.yml`은 push/PR마다 자동 검증만 실행하며 배포하지 않습니다.
 
 ## 실행
 Node.js 22 이상만 필요합니다. 의존성 설치가 필요하지 않습니다.
