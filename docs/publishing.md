@@ -2,9 +2,9 @@
 
 ## 현재 상태
 - V1 기준본은 `v1.0.0` 태그/릴리스로 보존한다.
-- GitHub Pages 대상 주소: https://domaksaramu.github.io/jade-engineering-notebook/ (**배포 성공 전까지 예정 주소**).
-- 현재 요금제는 이 비공개 저장소의 Pages를 지원하지 않는다고 GitHub API가 응답했다. 저장소 공개 전환은 사용자 승인 전에는 실행하지 않는다.
-- Pages를 활성화한 뒤 `main` 변경 또는 `Deploy portfolio` 수동 실행으로 배포한다. 다른 브랜치에서 수동 실행하면 배포를 건너뛴다.
+- GitHub Pages 대상 주소: https://domaksaramu.github.io/jade-engineering-notebook/ (배포 결과는 Actions에서 확인).
+- 2026-11-06 사용자 승인으로 저장소를 공개 전환하고 Pages의 GitHub Actions 배포를 활성화했다. 원본·커밋 이력·커밋한 초안도 공개된다.
+- Pages가 활성화되어 있으므로 `main` 변경 또는 `Deploy portfolio` 수동 실행으로 배포한다. 다른 브랜치에서 수동 실행하면 배포를 건너뛴다.
 - GitHub Actions는 정적 `dist/`만 배포한다. `/studio/`와 쓰기 API는 로컬 전용이다.
 
 ## 1. 초안

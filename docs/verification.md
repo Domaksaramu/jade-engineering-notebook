@@ -38,3 +38,10 @@
 - 테스트 총 13건과 기본/프로젝트 경로 각각 147개 링크·자산 검사를 통과했다.
 - src/와 content/ 및 기본 URL의 dist는 V1과 동일하다. 디자인·본문을 변경하지 않았다.
 - GitHub가 현재 요금제에서는 비공개 저장소 Pages를 지원하지 않는다고 422 응답했다. 공개 전환은 승인 대기이며 실제 배포·배포 후 브라우저 검증은 아직 하지 않았다.
+
+
+### 공개 전환 승인 후
+- 사용자 승인에 따라 저장소 visibility=public을 확인했다.
+- GitHub Pages를 build_type=workflow로 활성화하고 배포 주소를 확인했다.
+- Git 전체 추적 이력의 알려진 자격증명 패턴 검사는 통과했다. 포괄적인 기밀 감사를 대신하지 않는다.
+- main 병합 및 배포 후 실제 검증 결과는 PR #1의 완료 기록을 참고한다: https://github.com/Domaksaramu/jade-engineering-notebook/pull/1

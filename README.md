@@ -8,7 +8,7 @@
 - Markdown 파일 기반 원본. VS Code 등 텍스트 에디터와 Codex로 수정 가능.
 - 로컬 웹 에디터: 글 열기·새 초안·본문 미리보기·파일 저장·휴지통 이동.
 - 정적 HTML 빌드, 초안 제외, 테스트와 내부 링크 검사. 외부 npm 의존성 없음.
-- GitHub Pages 정적 배포 workflow (활성화 후 main 자동 배포·수동 실행). 저장소는 비공개로 유지하며, Pages 배포와 기존 블로그 연결은 아직 실행하지 않았습니다.
+- GitHub Pages 정적 배포 workflow (활성화 후 main 자동 배포·수동 실행). 저장소는 사용자 승인으로 공개 전환했습니다. Pages를 활성화했으며 기존 블로그는 변경하지 않습니다.
 
 ## 버전 기준
 - 저장소: https://github.com/Domaksaramu/jade-engineering-notebook
@@ -69,7 +69,7 @@ AGENTS.md와 docs/automation.md에 초안 생성·검증·발행 분리 규칙�
 ## 배포
 정적 산출물은 `dist/`뿐입니다. `SITE_URL=https://your-domain.example npm run build`로 RSS 절대 주소와 sitemap을 생성합니다. URL 미지정 시 샘플 Sites 주소를 사용합니다. 로컬 에디터, 원천 자료, 백업과 쓰기 API는 배포되지 않습니다.
 
-GitHub Pages: 현재 저장소는 비공개입니다. 공개 전환은 별도 승인 사항이며, 비공개 저장소의 Pages 이용 가능 여부는 계정 요금제를 확인해야 합니다. 배포하기로 결정하면 Settings → Pages → Source를 GitHub Actions로 지정한 뒤, Actions의 Deploy portfolio를 main에서 수동 실행합니다. 이후 main 변경은 자동 배포됩니다. 사용자 사이트와 프로젝트 하위 경로 모두 상대 링크로 동작합니다. 첫 저장소 생성·공개 전 기밀 검토가 필요합니다. [GitHub 공식 안내](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)에 따르면 GitHub Free의 public 저장소에서 Pages를 사용할 수 있습니다. 무료 범위·제한은 변경될 수 있으므로 최종 호스팅 선택 시 확인하세요.
+GitHub Pages: 공개 저장소와 GitHub Actions 배포를 사용합니다. 배포 주소는 https://domaksaramu.github.io/jade-engineering-notebook/ 이며 배포 완료 여부는 Actions에서 확인합니다. 처음 구성할 때는 Settings → Pages → Source를 GitHub Actions로 지정한 뒤, Actions의 Deploy portfolio를 main에서 수동 실행합니다. 이후 main 변경은 자동 배포됩니다. 사용자 사이트와 프로젝트 하위 경로 모두 상대 링크로 동작합니다. 첫 저장소 생성·공개 전 기밀 검토가 필요합니다. [GitHub 공식 안내](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages)에 따르면 GitHub Free의 public 저장소에서 Pages를 사용할 수 있습니다. 무료 범위·제한은 변경될 수 있으므로 최종 호스팅 선택 시 확인하세요.
 
 Sites의 owner-private 샘플 배포와 GitHub Pages의 public 배포는 서로 별개입니다. 지금 만든 것은 샘플이며 기존 블로그 교체가 아닙니다.
 
