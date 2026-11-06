@@ -62,7 +62,9 @@ test('Article structured data cannot escape its JSON script and omits unknown da
 test('Build supplies per-page canonical/PNG metadata, RSS dates and explicit sitemap dates at any base path',async t=>{
   const folder=await fixture(t),file=path.join(folder,'content/notes/object-lifetime.md');
   await writeFile(file,(await readFile(file,'utf8')).replace('draft: false','updatedAt: "2026-11-07"\ndraft: false'));
+  await writeFile(path.join(folder,'content/notes/calendar-regression.md'),dated('publishedAt: "2026-11-08"'));
   const docs=await build({projectRoot:folder,siteUrl:'https://example.com/nested/notebook/'}),base=path.join(folder,'dist');
+  const manifest=JSON.parse(await readFile(path.join(folder,'src/social/manifest.json'),'utf8'));
   const routes=['','writing/','journey/shared-foundation/',...docs.map(d=>d.href)];
   const images=new Set();
   for(const route of routes) {
@@ -72,13 +74,22 @@ test('Build supplies per-page canonical/PNG metadata, RSS dates and explicit sit
     assertSocialPng(await readFile(path.join(base,image.split('/notebook/')[1])));
     if(route.startsWith('notes/')||route.startsWith('cases/')) {
       images.add(image);const data=JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1]);
-      assert.equal(data.datePublished,'2026-11-06');assert.equal(data.mainEntityOfPage,canonical);
+      const doc=docs.find(d=>d.href===route);
+      assert.equal(data.datePublished,doc.publishedAt);assert.equal(data.dateModified,doc.updatedAt);assert.equal(data.mainEntityOfPage,canonical);
     }
   }
-  assert.equal(images.size,6);
+  assert.equal(images.size,new Set(docs.map(d=>manifest[socialKey(d)]===socialFingerprint(d)?socialKey(d):'notebook')).size);
   const xml=await readFile(path.join(base,'sitemap.xml'),'utf8');assert.match(xml,/<loc>https:\/\/example.com\/nested\/notebook\/notes\/object-lifetime\/<\/loc><lastmod>2026-11-07<\/lastmod>/);
-  assert.equal((xml.match(/<lastmod>/g)||[]).length,6);
-  assert.equal(((await readFile(path.join(base,'feed.xml'),'utf8')).match(/<pubDate>Fri, 06 Nov 2026 00:00:00 GMT<\/pubDate>/g)||[]).length,3);
+  assert.equal((xml.match(/<lastmod>/g)||[]).length,docs.filter(d=>d.updatedAt||d.publishedAt).length);
+  for(const doc of docs)if(doc.updatedAt||doc.publishedAt)assert(xml.includes(`<loc>https://example.com/nested/notebook/${doc.href}</loc><lastmod>${doc.updatedAt||doc.publishedAt}</lastmod>`));
+  const items=[...(await readFile(path.join(base,'feed.xml'),'utf8')).matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m=>m[1]);
+  assert.equal(items.length,docs.filter(d=>d.kind==='notes').length);
+  for(const doc of docs.filter(d=>d.kind==='notes')) {
+    const item=items.find(item=>item.includes(`<link>https://example.com/nested/notebook/${doc.href}</link>`));
+    assert(item,doc.href);
+    if(doc.publishedAt)assert(item.includes(`<pubDate>${new Date(doc.publishedAt).toUTCString()}</pubDate>`));
+    else assert(!item.includes('<pubDate>'));
+  }
   const missing=await readFile(path.join(base,'404.html'),'utf8');assert(!missing.includes('rel="canonical"'));assert(!missing.includes('property="og:image"'));assert.match(missing,/noindex,nofollow/);
 });
 

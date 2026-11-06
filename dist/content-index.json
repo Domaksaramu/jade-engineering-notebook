@@ -79,5 +79,20 @@
       "FastAPI"
     ],
     "href": "cases/platform-operations/"
+  },
+  {
+    "title": "응답 제한이 있는 연동에서, DB 접근과 업무 경계를 함께 본 이유",
+    "summary": "최대 다섯 단계로 이어지던 반복 단건 조회를 개선하고, 오토커밋으로 흩어져 있던 DB 처리를 업무 단위 트랜잭션으로 정리한 금융 연동 경험입니다.",
+    "kind": "notes",
+    "slug": "financial-processing-boundaries",
+    "category": "성능과 연동",
+    "tags": [
+      "Java",
+      "Tibero",
+      "SQL 튜닝",
+      "트랜잭션",
+      "외부기관 연동"
+    ],
+    "href": "notes/financial-processing-boundaries/"
   }
 ]

@@ -5,5 +5,6 @@
   "notes-after-deployment": "0c1d5e7c42a1db4b0ff8b7ee21d264be259c8eb530aa0602c63b5df56cc37523",
   "cases-financial-integration": "9124bd18a2f992f12e9ee12c3b7bc3feb1e9189fc1d546c3119366533e3354a4",
   "notes-local-financial-integration": "895342de3ea6ea170919fcf5e99010688fa87f52c3ecf5505e2acb4eb832eddb",
-  "cases-platform-operations": "9c4fe61050f6599126d0d26457c5419f86465417ca6e15801883029673d61b0d"
+  "cases-platform-operations": "9c4fe61050f6599126d0d26457c5419f86465417ca6e15801883029673d61b0d",
+  "notes-financial-processing-boundaries": "bd9fb515526346ef080a6ce1002f7be0fb8ba70f74b7a618df2508cdd4c9c8f6"
 }
