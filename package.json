@@ -13,6 +13,10 @@
     "test": "node --test",
     "check": "node scripts/check.mjs",
     "new": "node scripts/content.mjs",
-    "content:status": "node scripts/content.mjs --list"
+    "content:status": "node scripts/content.mjs --list",
+    "draft": "node scripts/editorial.mjs draft",
+    "review": "node scripts/editorial.mjs review",
+    "verify": "node scripts/verify.mjs",
+    "content:prepare": "node scripts/editorial.mjs prepare"
   }
 }

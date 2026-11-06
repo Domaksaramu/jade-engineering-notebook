@@ -13,26 +13,27 @@
 - 과거 Pages 주소의 자동 리다이렉트는 전제하지 않는다. 공유한 링크도 새 주소로 수정한다.
 - V1 태그와 Git 이력은 이름 변경 전후 동일하게 보존한다.
 
+## 안전한 작성·검토 명령
+
+새 비공개 글은 `npm run draft -- slug` → 텍스트 편집 → `npm run review -- slug`로 작성한다. 승인된 원문만 `prepare`로 공개 원본에 준비한 뒤 `npm run verify`로 일괄 검증한다. **prepare는 외부 배포가 아니다.** 기존 `new`/로컬 에디터는 계속 content에 초안을 만든다. 경로·검토 hash·확인 옵션은 [editorial-workflow.md](editorial-workflow.md)를 참고한다.
+
 ## 1. 초안
 ```sh
 git switch main
 git pull --ff-only
 git switch -c writing/my-next-story
-npm run new -- my-next-story
-npm run dev
+npm run draft -- my-next-story
 ```
 `content:status`의 READY는 빌드 대상이라는 뜻이며 실제 외부 배포 완료를 뜻하지 않는다.
 
-`content/notes/my-next-story.md`를 텍스트 에디터 또는 로컬 `/studio/`에서 작성한다. 아직 사이트에 내보내지 않을 때는 `draft: true`를 유지한다.
+`_private/drafts/notes/my-next-story.md`를 텍스트 에디터로 작성한다. 이 폴더는 로컬 `/studio/` 목록이나 빌드에 포함되지 않는다. 기존 `new`/로컬 에디터는 공개 원본 경로인 content에 파일을 만들므로 비공개 초안 생성과 구분한다.
 
 **중요:** draft는 사이트에서만 제외된다. 저장소가 공개되면 커밋한 Markdown 초안과 과거 이력도 공개된다. 비공개 메모·원천 자료는 이 저장소에 넣지 않는다. `.trash/`는 로컬 복구용이며 커밋하지 않는다.
 
 ## 2. 검토
 ```sh
-npm run content:status
-npm test
-npm run build
-npm run check
+npm run review -- my-next-story
+npm run verify
 ```
 - 회사·프로젝트·기간·개인 역할을 구분했는가?
 - 관찰한 사실, 원인에 대한 해석, 향후 제안을 구분했는가?
@@ -44,8 +45,8 @@ npm run check
 테스트 성공은 사실·기밀 검토나 공개 승인을 대신하지 않는다. Markdown의 원시 HTML/이미지/MDX는 지원하지 않는다.
 
 ## 3. 발행
-1. 공개가 승인된 글만 `draft: false`로 변경한다.
-2. 로컬 미리보기와 위 검사 명령을 다시 실행한다. 생성물 `dist/`는 직접 고치지 않는다.
+1. 공개가 승인된 원문의 최신 검토 hash·사실/기밀 검토 확인·명시적 발행일을 사용해 `prepare`한다([명령 예시](editorial-workflow.md#3-승인한-버전만-공개-원본으로-준비)). content 원본은 draft:false가 되며, 이 단계만으로 외부 배포되지는 않는다.
+2. `npm run verify`를 실행하고 `npm run dev`의 로컬 미리보기와 diff를 확인한다. 생성물 `dist/`는 직접 고치지 않는다.
 3. 변경을 커밋하고 글 브랜치를 push한 뒤 PR을 만든다.
 4. `Validate notebook` 성공과 diff를 확인하고 `main`에 병합한다. **Pages 활성화 이후에는 이 병합이 발행 동작이다.**
 5. `Deploy portfolio`의 deploy job 성공과 실제 페이지·RSS를 확인한다. 실패하면 현재 공개 버전은 자동으로 새 버전으로 바뀌지 않으며, 실행 로그를 확인하고 수정한다.

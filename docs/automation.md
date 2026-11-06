@@ -1,14 +1,15 @@
-# Markdown 기반 블로깅 자동화 준비
+# Markdown 기반 블로깅 자동화
 
 ## 현재 동작
-1. 파일이 원본이므로 Codex가 content/의 Markdown을 직접 생성/편집할 수 있다.
-2. `npm run new -- slug`는 초안을 만들며 같은 파일을 덮어쓰지 않는다.
-3. `draft: true`는 웹 빌드에서 제외된다.
-4. `npm test && npm run build && npm run check`로 검증한다.
-5. 발행은 별도 행동이다. 이 프로젝트는 예약 실행/외부 블로그 발행에 연결돼 있지 않다.
+1. `npm run draft -- slug`로 `_private/drafts/notes/`에 로컬 초안을 만들고 `review`로 검사한다. 승인된 원문 hash와 사람의 검토 확인이 있어야 `prepare`로 공개 원본을 준비한다. 명령은 Git push·배포를 하지 않는다. [전체 사용법](editorial-workflow.md), [재사용 요청 양식](prompts/draft-note.md).
+2. 파일이 원본이므로 Codex가 지정된 비공개 초안이나 검토 대상 원본을 직접 편집할 수 있다.
+3. `npm run new -- slug`는 초안을 만들며 같은 파일을 덮어쓰지 않는다.
+4. `draft: true`는 웹 빌드에서 제외된다.
+5. `npm run verify`로 구문·테스트·빌드·정적 검사를 일괄 실행한다.
+6. 발행은 별도 행동이다. 이 프로젝트는 예약 실행/외부 블로그 발행에 연결돼 있지 않다.
 
 ## Codex 요청 예시
-“AGENTS.md와 docs/content-policy.md를 읽고, 내가 제공한 작업 기록으로 content/notes/에 초안을 작성해. 관찰·해석·검증을 구분하고 draft:true를 유지해. 내부 주소나 코드는 복사하지 말고 검증 명령을 실행해. 배포하지 마.”
+“AGENTS.md와 docs/prompts/draft-note.md를 읽고, 내가 명시한 공개 가능한 작업 기록만으로 _private/drafts/notes/에 초안을 작성해. 관찰·해석·검증을 구분하고 draft:true를 유지해. review를 실행하고 근거·미확인 항목을 보고해. 공개 원본 준비나 Git push·배포는 하지 마.”
 
 ## 운영으로 확장할 때
 - 입력: 공개 가능한 업무 메모/학습 기록만 지정한다. 원천 폴더 전체를 자동 공개하지 않는다.

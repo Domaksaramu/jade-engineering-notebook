@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- 비공개 초안 draft → 원문 hash 기반 review → 명시적 승인 확인 prepare → verify 명령. 자동 Git push·발행 없음.
+- 동시 생성 시 기존 공개 원본 덮어쓰기 방지, 기존 글 발행일 보존/수정일·백업 처리.
+- Codex 초안 작성 요청 양식과 PR 사실·기밀 검토 체크리스트.
+
 - 사용자명 jade-builds 및 저장소 blogs로 이전. 배포 주소 https://jade-builds.github.io/blogs/, 원본·로컬 remote·문서·RSS/sitemap 경로 갱신.
 
 - GitHub Pages 활성화 후 main 자동 배포, 다른 브랜치 배포 방지.

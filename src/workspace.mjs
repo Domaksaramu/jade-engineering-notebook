@@ -1,4 +1,4 @@
-import { readFile, writeFile, rename, mkdir, lstat } from 'node:fs/promises';
+import { readFile, writeFile, rename, mkdir, lstat, link, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { kinds, validSlug, parseDocument, loadContent } from './content.mjs';
@@ -26,15 +26,20 @@ export async function backupDocument(root,kind,slug,source) {
   const backup=path.join(folder,`${Date.now()}-${randomUUID()}-${kind}-${slug}.md`);
   await writeFile(backup,source,{flag:'wx'});return path.basename(backup);
 }
-export async function saveDocument(root,kind,slug,raw) {
+export async function saveDocument(root,kind,slug,raw,{createOnly=false}={}) {
   if(typeof raw!=='string'||Buffer.byteLength(raw)>200_000)throw new Error('글은 UTF-8 기준 200KB 이내여야 합니다.');
   const doc=parseDocument(raw,slug,kind);
   const target=await documentPath(root,kind,slug);
   await validateChange(root,kind,slug,doc);
   const previous=await readFile(target,'utf8').catch(error=>{if(error.code==='ENOENT')return null;throw error;});
+  if(createOnly&&previous!==null)throw new Error('같은 공개 원본이 이미 있습니다. 덮어쓰지 않습니다.');
   if(previous!==null)await backupDocument(root,kind,slug,previous);
   const temporary=target+`.${randomUUID()}.tmp`;
-  await writeFile(temporary,raw,{flag:'wx'});await rename(temporary,target);
+  await writeFile(temporary,raw,{flag:'wx'});
+  if(createOnly) {
+    // link is an atomic create-if-absent: a competing writer cannot be overwritten.
+    try {await link(temporary,target);} finally {await unlink(temporary);}
+  } else await rename(temporary,target);
 }
 export async function deleteDocument(root,kind,slug) {
   const target=await documentPath(root,kind,slug);const raw=await readFile(target,'utf8');

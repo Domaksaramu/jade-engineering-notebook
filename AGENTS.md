@@ -7,10 +7,10 @@
 - 회사·기간·역할, 수치의 분모/환경/기간을 보존한다. 내부 코드·실제 토큰·주소·고객 정보는 넣지 않는다.
 
 ## Content automation
-1. `npm run new -- english-slug`로 초안을 생성한다. 기존 파일을 덮어쓰지 않는다.
+1. 비공개 새 글은 `npm run draft -- english-slug`로 `_private/drafts/notes/`에 만든다. 기존 `new`/로컬 에디터의 content 초안은 커밋하면 공개됨을 구분한다. 기존 파일을 덮어쓰지 않는다.
 2. 확인된 자료로 상황 → 관찰 → 판단 → 변경 → 검증/한계를 작성한다.
 3. 새 글은 `draft: true`를 유지한다. 사용자가 발행을 요청하지 않았다면 자동으로 공개하지 않는다.
-4. 생성/수정 후 `npm test && npm run build && npm run check`를 실행한다.
+4. `npm run review -- slug`로 검사하고 수정 후 다시 검토한다. `checksPassed`는 사실·기밀·공개 승인이 아니다. `prepare`의 확인 옵션은 해당 원문에 대한 실제 검토·명시적 사용자 공개 승인이 있을 때만 사용한다. 자세한 절차는 docs/editorial-workflow.md. 생성/수정 후 `npm run verify`로 일괄 검증한다.
 5. 배포는 명시적인 사용자 발행 요청과 현재 호스팅 스킬의 배포 정책을 따른다. 기존 공개 블로그로 자동 반영하지 않는다.
 
 ## Runtime
