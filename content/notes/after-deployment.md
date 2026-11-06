@@ -2,6 +2,11 @@
 title: "‘배포 성공’을 어디까지라고 부를 것인가"
 summary: "빌드, 기동, 요청 접수, 업무 완료를 나눠 보면 자동화해야 할 다음 단계가 보입니다."
 category: "운영의 기준"
+company: "현대오토에버 · MLOps 플랫폼"
+project: "MLOps 배포·E2E 검증·운영 리포팅"
+role: "Backend · MLOps 운영 / CI/CD·E2E 검증·리포팅"
+journey: "platform-operations"
+relatedCases: ["platform-operations"]
 period: "2026 경험 정리"
 tags: ["CI/CD", "E2E", "플랫폼"]
 order: 2

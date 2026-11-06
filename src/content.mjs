@@ -1,5 +1,6 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { journeys, validateConnections } from './experience.mjs';
 
 export const kinds = ['cases', 'notes'];
 export const validSlug = slug => typeof slug==='string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) && slug.length <= 80;
@@ -59,6 +60,15 @@ export function parseDocument(raw, slug, kind) {
   if(typeof meta.draft!=='boolean') throw new Error(`${slug}: draft는 true/false로 지정하세요.`);
   if(!Array.isArray(meta.tags)||meta.tags.some(t=>typeof t!=='string')) throw new Error(`${slug}: tags는 문자열 배열입니다.`);
   if(kind==='cases') for(const key of ['company','role','result','scope']) if(typeof meta[key]!=='string') throw new Error(`${slug}: ${key} 필수`);
+  for(const key of ['company','project','role']) if(meta[key]!==undefined && (typeof meta[key]!=='string'||!meta[key].trim())) throw new Error(`${slug}: ${key}는 비어 있지 않은 문자열이어야 합니다.`);
+  if(meta.journey!==undefined) {
+    if(!journeys.some(j=>j.id===meta.journey))throw new Error(`${slug}: 올바른 경력 흐름을 지정하세요.`);
+    for(const key of ['company','project','role'])if(!meta[key])throw new Error(`${slug}: 경력 흐름에 연결하려면 ${key} 필수`);
+  }
+  if(meta.relatedCases!==undefined) {
+    if(kind!=='notes'||!Array.isArray(meta.relatedCases)||meta.relatedCases.some(s=>!validSlug(s))||new Set(meta.relatedCases).size!==meta.relatedCases.length)throw new Error(`${slug}: relatedCases는 중복 없는 사례 slug 배열이어야 합니다.`);
+    if(meta.relatedCases.length&&!meta.journey)throw new Error(`${slug}: 사례를 연결하려면 경력 흐름을 지정하세요.`);
+  }
   if(!match[2].trim()) throw new Error(`${slug}: 본문이 비어 있습니다.`);
   const toc=[]; let inCode=false;
   for(const line of match[2].split(/\r?\n/)) {
@@ -69,12 +79,13 @@ export function parseDocument(raw, slug, kind) {
   }
   return { ...meta, slug, kind, body:match[2], html:markdown(match[2]), toc, href:`${kind}/${slug}/`, minutes:Math.max(1,Math.ceil(match[2].length/650)) };
 }
-export async function loadContent(root, {drafts=false}={}) {
+export async function loadContent(root, {drafts=false,validate=true}={}) {
   const result=[];
   for(const kind of kinds) for(const file of (await readdir(path.join(root,'content',kind))).sort()) {
     if(!file.endsWith('.md')) continue;
     const doc=parseDocument(await readFile(path.join(root,'content',kind,file),'utf8'),file.slice(0,-3),kind);
-    if(drafts || !doc.draft) result.push(doc);
+    result.push(doc);
   }
-  return result.sort((a,b)=>(a.order??99)-(b.order??99)||a.slug.localeCompare(b.slug));
+  if(validate)validateConnections(result);
+  return result.filter(d=>drafts||!d.draft).sort((a,b)=>(a.order??99)-(b.order??99)||a.slug.localeCompare(b.slug));
 }

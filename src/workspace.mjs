@@ -1,7 +1,15 @@
 import { readFile, writeFile, rename, mkdir, lstat } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { kinds, validSlug, parseDocument } from './content.mjs';
+import { kinds, validSlug, parseDocument, loadContent } from './content.mjs';
+import { validateConnections } from './experience.mjs';
+
+async function validateChange(root,kind,slug,replacement) {
+  // Validate the proposed graph, not the old graph, so a broken reference can be repaired.
+  const docs=(await loadContent(root,{drafts:true,validate:false})).filter(d=>d.kind!==kind||d.slug!==slug);
+  if(replacement)docs.push(replacement);
+  validateConnections(docs);
+}
 
 export async function documentPath(root,kind,slug) {
   if(!kinds.includes(kind)||!validSlug(slug)) throw new Error('허용되지 않는 글 경로입니다.');
@@ -20,8 +28,9 @@ export async function backupDocument(root,kind,slug,source) {
 }
 export async function saveDocument(root,kind,slug,raw) {
   if(typeof raw!=='string'||Buffer.byteLength(raw)>200_000)throw new Error('글은 UTF-8 기준 200KB 이내여야 합니다.');
-  parseDocument(raw,slug,kind);
+  const doc=parseDocument(raw,slug,kind);
   const target=await documentPath(root,kind,slug);
+  await validateChange(root,kind,slug,doc);
   const previous=await readFile(target,'utf8').catch(error=>{if(error.code==='ENOENT')return null;throw error;});
   if(previous!==null)await backupDocument(root,kind,slug,previous);
   const temporary=target+`.${randomUUID()}.tmp`;
@@ -29,6 +38,7 @@ export async function saveDocument(root,kind,slug,raw) {
 }
 export async function deleteDocument(root,kind,slug) {
   const target=await documentPath(root,kind,slug);const raw=await readFile(target,'utf8');
+  await validateChange(root,kind,slug);
   // Moving rather than unlinking keeps the exact source recoverable.
   const folder=path.join(root,'.trash');await mkdir(folder,{recursive:true});
   if((await lstat(folder)).isSymbolicLink())throw new Error('휴지통 경로가 올바르지 않습니다.');

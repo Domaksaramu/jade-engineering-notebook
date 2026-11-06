@@ -21,3 +21,5 @@
 정적 사이트에는 상시 서버/DB가 필요 없다. GitHub Free public 저장소의 Pages를 후보로 준비했다. Codex·모델 API 사용량/계정 비용, 유료 도메인, 호스팅 사용 한도는 사이트 정적 호스팅 비용과 별개다. ‘블로깅 자동화까지 전부 무료’라고 보장하지 않는다.
 
 상세 운영 절차는 [publishing.md](publishing.md), 콘텐츠 후보와 근거 경계는 [content-roadmap.md](content-roadmap.md)를 참고한다.
+
+경력 흐름 분류와 사례↔기술 글 연결 메타데이터는 [experience-links.md](experience-links.md)를 참고한다. 회사·프로젝트가 같은 경우에만 `relatedCases`를 지정하며, 연결을 깨는 에디터 저장/삭제는 원문 변경 전에 거부한다.

@@ -3,6 +3,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { root, siteLocation } from './build.mjs';
 import { loadContent } from '../src/content.mjs';
+import { journeys } from '../src/experience.mjs';
 
 const base=path.join(root,'dist');
 const { prefix } = siteLocation();
@@ -27,5 +28,5 @@ for(const page of pages) {
 }
 for(const doc of docs.filter(d=>d.draft))assert(!files.includes(path.join(base,doc.href,'index.html')),'draft leakage');
 assert(!files.some(f=>f.includes('studio')||f.includes('content/cases')||f.includes('.trash')),'private source leakage');
-assert.equal(pages.length,docs.filter(d=>!d.draft).length+3);
+assert.equal(pages.length,docs.filter(d=>!d.draft).length+3+journeys.length);
 console.log(`PASS: ${pages.length} pages, ${links} local links/assets, draft exclusion, editor exclusion, Korean metadata.`);

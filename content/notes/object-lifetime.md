@@ -2,6 +2,11 @@
 title: "캐시를 넣는 코드보다, 비우는 경로를 먼저 보는 이유"
 summary: "인증 캐시 장애를 겪으며 정리한 객체 수명과 운영 관측의 질문들."
 category: "장애에서 배운 것"
+company: "다우기술 · 키움저축은행"
+project: "소비자금융 인증 캐시·JVM 안정화"
+role: "장애 원인 분석 · 캐시 로직 개선 / 단독 수행"
+journey: "shared-foundation"
+relatedCases: ["auth-cache"]
 period: "2023 경험 · 2026 정리"
 tags: ["JVM", "운영 안정성"]
 order: 1
