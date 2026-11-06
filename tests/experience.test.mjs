@@ -71,6 +71,23 @@ test('Real career content keeps 2020 integration distinct from the 2022 renewal'
   assert.deepEqual(relatedDocuments(docs.find(d=>d.slug==='platform-operations'),docs).project.map(d=>d.slug),['after-deployment']);
 });
 
+test('Career copy speaks as its author without changing contribution or measurement scope',async()=>{
+  const docs=await loadContent(root);
+  const detached=/기록돼 있습니다|정리돼 있습니다|경력 기록에는|경력 기록에서 확인되는 결과|보관 경력 기록을 바탕으로|기록으로 확인한 결과/;
+  for(const doc of docs)assert.doesNotMatch(doc.body+'\n'+(doc.scope||''),detached,doc.href);
+  for(const slug of ['financial-integration','financial-processing-boundaries']) {
+    const doc=docs.find(d=>d.slug===slug);
+    assert(doc.body.includes('제 기여도는 40%입니다.'));
+    assert(doc.body.includes('180초'));assert(doc.body.includes('약 95%'));
+    assert(doc.body.includes('TPS'));assert(doc.body.includes('분산 원자성'));
+  }
+  const cache=docs.find(d=>d.slug==='auth-cache');
+  assert(cache.body.includes('10GB에서 3.5GB'));assert(cache.body.includes('동일 부하'));
+  assert(cache.body.includes('관측 시간'));
+  const landing=home(docs),rendered=article(cache,docs);
+  assert(!landing.includes('기록된 Heap'));assert(!rendered.includes('경력 기록을 바탕으로 재구성'));
+});
+
 test('Editor rejects changes that break project links before touching sources or backups',async t=>{
   const folder=await fixture(t),target=path.join(folder,'content/cases/example.md');
   await writeFile(target,caseRaw());
