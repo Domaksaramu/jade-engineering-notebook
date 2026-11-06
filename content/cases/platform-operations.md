@@ -5,14 +5,15 @@ category: "플랫폼과 자동화"
 company: "현대오토에버 · MLOps 플랫폼"
 project: "MLOps 배포·E2E 검증·운영 리포팅"
 journey: "platform-operations"
-period: "2025.12 — 현재 / 성과 기록 2026.08 기준"
+period: "2025.12 — 현재 / 성과 범위 2026.08 기준"
 role: "Backend · MLOps 운영 / CI/CD·E2E 검증·리포팅"
 result: "배포 이후까지"
 scope: "개발계 9개 ML 서비스 CI/CD · E2E 검증 구축"
 tags: ["Kubernetes", "Helm", "GitLab CI/CD", "FastAPI"]
 order: 3
-publishedAt: "2026-11-06"
 draft: false
+publishedAt: "2026-11-06"
+updatedAt: "2026-11-07"
 ---
 ## 컨테이너가 떴다는 사실만으로는 부족했습니다
 
@@ -30,7 +31,7 @@ GitLab CI/CD, Harbor, Helm 기반으로 개발계 9개 ML 서비스의 CI/CD를 
 
 FastAPI 기반 E2E 검증 서비스를 구축해 테스트 요청, 콜백 수신, 결과 조회를 연결했습니다. External Gateway에서 요청 UUID가 달라지는 경로와 서비스마다 다른 콜백 조건을 반영했습니다. 접수 성공을 최종 처리 성공으로 해석하지 않는 것이 중요한 판단이었습니다.
 
-| 검증 범위 | 기록으로 확인한 결과 |
+| 검증 범위 | 확인한 결과 |
 |---|---|
 | 개발계 동기 4개 서비스 | 서비스별 10/10 통과 |
 | 운영계 APS 비동기 | 콜백 수신 및 정상 결과 코드 확인 |
