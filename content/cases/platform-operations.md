@@ -11,6 +11,7 @@ result: "배포 이후까지"
 scope: "개발계 9개 ML 서비스 CI/CD · E2E 검증 구축"
 tags: ["Kubernetes", "Helm", "GitLab CI/CD", "FastAPI"]
 order: 3
+publishedAt: "2026-11-06"
 draft: false
 ---
 ## 컨테이너가 떴다는 사실만으로는 부족했습니다

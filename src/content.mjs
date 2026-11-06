@@ -58,6 +58,11 @@ export function parseDocument(raw, slug, kind) {
   }
   for(const key of ['title','summary','category','period']) if(typeof meta[key]!=='string'||!meta[key].trim()) throw new Error(`${slug}: ${key} 필수`);
   if(typeof meta.draft!=='boolean') throw new Error(`${slug}: draft는 true/false로 지정하세요.`);
+  for(const key of ['publishedAt','updatedAt']) if(meta[key]!==undefined) {
+    const date=meta[key];
+    if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date))||new Date(date).toISOString().slice(0,10)!==date) throw new Error(`${slug}: ${key}는 실제 날짜 YYYY-MM-DD로 작성하세요.`);
+  }
+  if(meta.updatedAt && (!meta.publishedAt || meta.updatedAt<meta.publishedAt)) throw new Error(`${slug}: updatedAt은 publishedAt 이후 날짜여야 합니다.`);
   if(!Array.isArray(meta.tags)||meta.tags.some(t=>typeof t!=='string')) throw new Error(`${slug}: tags는 문자열 배열입니다.`);
   if(kind==='cases') for(const key of ['company','role','result','scope']) if(typeof meta[key]!=='string') throw new Error(`${slug}: ${key} 필수`);
   for(const key of ['company','project','role']) if(meta[key]!==undefined && (typeof meta[key]!=='string'||!meta[key].trim())) throw new Error(`${slug}: ${key}는 비어 있지 않은 문자열이어야 합니다.`);

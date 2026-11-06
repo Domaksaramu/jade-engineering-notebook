@@ -10,6 +10,7 @@ relatedCases: ["platform-operations"]
 period: "2026 경험 정리"
 tags: ["CI/CD", "E2E", "플랫폼"]
 order: 2
+publishedAt: "2026-11-06"
 draft: false
 ---
 ## 하나의 초록불로 묶지 않기

@@ -11,6 +11,7 @@ result: "반복 경로의 축소"
 scope: "기존 조회 로직 대비 약 95% 개선 기록"
 tags: ["Java", "Spring", "Tibero", "SQL"]
 order: 2
+publishedAt: "2026-11-06"
 draft: false
 ---
 ## 빠른 응답은 외부기관만의 문제가 아니었습니다

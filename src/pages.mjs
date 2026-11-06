@@ -1,5 +1,6 @@
 import { escape as e } from './content.mjs';
 import { journeys, relatedDocuments } from './experience.mjs';
+import { seoTags } from './seo.mjs';
 
 const arrow = '<span aria-hidden="true">↗</span>';
 export const profile = {
@@ -11,12 +12,13 @@ export const profile = {
   ]
 };
 
-export function shell({title, description, root='', active='', body, article=false, noindex=false}) {
+export function shell({title, description, root='', active='', body, article=false, noindex=false, seo={}}) {
   const link = (href,label,id)=>`<a href="${root}${href}"${active===id?' aria-current="page"':''}>${label}</a>`;
   return `<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f6f2">
 <title>${e(title)} · 임재원</title><meta name="description" content="${e(description)}">${noindex?'<meta name="robots" content="noindex,nofollow">':''}
 <meta property="og:title" content="${e(title)} · 임재원"><meta property="og:description" content="${e(description)}"><meta property="og:type" content="${article?'article':'website'}"><meta property="og:locale" content="ko_KR">
+${noindex?'':seoTags({title,description,article,...seo})}
 <link rel="icon" href="${root}favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${root}style.css"><link rel="alternate" type="application/rss+xml" title="임재원의 경험 노트" href="${root}feed.xml"><script src="${root}app.js" defer></script></head>
 <body><a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="${root}index.html" aria-label="임재원 홈"><span class="brand-mark">j<span>.</span></span><span>임재원<span class="brand-caption">ENGINEERING NOTEBOOK</span></span></a>
@@ -48,12 +50,12 @@ function articleConnections(doc,docs,root) {
   return `<section class="related"><p class="eyebrow">EXPERIENCE / CONNECTED</p><h2>이 경험에서 이어 읽기</h2>${project.length?`<h3>${doc.kind==='cases'?'이 프로젝트의 기술 글':'이 글의 프로젝트 사례'}</h3>${project.map(d=>connectionRow(d,root)).join('')}`:''}${journey.length?`<h3>같은 경력 흐름의 다른 글</h3>${journey.slice(0,2).map(d=>connectionRow(d,root)).join('')}`:''}<div class="connection-navigation"><a class="text-link" href="${root}${current.href}">${e(current.title)}의 경험 모아 보기 ${arrow}</a>${next?`<a class="text-link" href="${root}${next.href}">다음 경력 흐름: ${e(next.title)} ${arrow}</a>`:''}</div></section>`;
 }
 export function noteRow(note,root='') {
-  return `<article class="note-row" data-note data-search="${e([note.title,note.summary,note.category,note.company||'',note.project||'',note.role||'',journeys.find(j=>j.id===note.journey)?.title||'',...note.tags].join(' ').toLowerCase())}" data-category="${e(note.category)}"><div class="note-meta"><span>${e(note.category)}</span><span>${e(note.period)}</span></div><div><h3><a href="${root}${note.href}">${e(note.title)} ${arrow}</a></h3>${note.project?`<p class="note-project">${e(note.company)} / ${e(note.project)}</p>`:''}<p>${e(note.summary)}</p>${tags(note.tags)}</div><span class="read-time">${note.minutes}분 읽기</span></article>`;
+  return `<article class="note-row" data-note data-search="${e([note.title,note.summary,note.category,note.company||'',note.project||'',note.role||'',journeys.find(j=>j.id===note.journey)?.title||'',...note.tags].join(' ').toLowerCase())}" data-category="${e(note.category)}"><div class="note-meta"><span>${e(note.category)}</span><span>${e(note.period)}</span></div><div><h3><a href="${root}${note.href}">${e(note.title)} ${arrow}</a></h3>${note.project?`<p class="note-project">${e(note.company)} / ${e(note.project)}</p>`:''}<p>${e(note.summary)}</p>${tags(note.tags)}</div><span class="read-time">${note.publishedAt?`<time datetime="${e(note.publishedAt)}">${e(note.publishedAt.replaceAll('-','.'))} 발행</time>`:''}${note.minutes}분 읽기</span></article>`;
 }
-export function home(docs) {
+export function home(docs,seo={}) {
   const cases=docs.filter(d=>d.kind==='cases'), notes=docs.filter(d=>d.kind==='notes');
   const first=cases[0];
-  return shell({title:'시스템을 이해하고, 운영까지',description:'금융 백엔드에서 MLOps 플랫폼까지. 임재원의 경력과 기술적 판단을 기록하는 엔지니어링 노트북.',body:`
+  return shell({seo,title:'시스템을 이해하고, 운영까지',description:'금융 백엔드에서 MLOps 플랫폼까지. 임재원의 경력과 기술적 판단을 기록하는 엔지니어링 노트북.',body:`
 <main id="main">
 <section class="hero container" aria-labelledby="hero-title"><div class="hero-copy"><p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> BACKEND / PLATFORM ENGINEER</p><h1 id="hero-title">문제를 좁히고,<br>구조를 바꾸고,<br><span>운영으로 확인합니다.</span></h1><p class="hero-description">안녕하세요, 백엔드 엔지니어 <strong>임재원</strong>입니다.<br>금융 연동부터 ML 서비스 운영까지,<br>시스템의 경계를 이해하고 반복되는 문제를 줄여 왔습니다.</p><div class="hero-actions"><a class="button" href="#work">문제 해결 사례 보기 <span aria-hidden="true">↓</span></a><a class="text-link" href="#career">어떤 길을 걸어왔나요 ${arrow}</a></div></div>
 <aside class="career-map" aria-label="경력의 확장 방향"><div class="map-head"><span class="eyebrow">THE THREAD THROUGH MY WORK</span><span class="map-index">01 — 03</span></div><p class="map-intro">환경은 달라져도, <br>질문은 이어집니다.</p><ol>${journeys.map((j,i)=>`<li><span class="map-step">0${i+1}</span><div><h2><a href="${j.href}">${e(j.heading)}</a></h2><p>${e(j.detail)}</p></div><span class="map-year">${j.year}</span></li>`).join('')}</ol><div class="map-foot"><span class="tiny-square" aria-hidden="true"></span><span>도메인보다 오래 남는, 문제를 푸는 방식.</span></div></aside></section>
@@ -66,21 +68,27 @@ export function home(docs) {
 </main>`});
 }
 
-export function article(doc,docs) {
+function articleDates(doc) {
+  if(!doc.publishedAt)return '';
+  const date=(label,value)=>`<span>${label} <time datetime="${e(value)}">${e(value.replaceAll('-','.'))}</time></span>`;
+  return `<div class="article-dates">${date('발행',doc.publishedAt)}${doc.updatedAt && doc.updatedAt!==doc.publishedAt?date('수정',doc.updatedAt):''}<span>${doc.minutes}분 읽기</span></div>`;
+}
+export function article(doc,docs,seo={}) {
   const root='../../'; const journey=journeys.find(j=>j.id===doc.journey);
-  return shell({title:doc.title,description:doc.summary,root,active:doc.kind==='notes'?'writing':'work',article:true,body:`<main id="main" class="article-page container"><div class="article-breadcrumb"><a href="${root}index.html">홈</a><span>/</span><a href="${root}${doc.kind==='cases'?'index.html#work':'writing/'}">${doc.kind==='cases'?'문제 해결 사례':'경험 노트'}</a></div><header class="article-header"><span class="eyebrow">${e(doc.category)} / ${doc.kind==='cases'?'CASE STUDY':'FIELD NOTE'}</span><h1>${e(doc.title)}</h1><p class="article-lead">${e(doc.summary)}</p><div class="article-context">${doc.company?`<div><span>회사 · 수행 환경</span><strong>${e(doc.company)}</strong></div>`:''}${doc.project?`<div><span>프로젝트</span><strong>${e(doc.project)}</strong></div>`:''}<div><span>경험 시기</span><strong>${e(doc.period)}</strong></div>${doc.role?`<div><span>담당 범위</span><strong>${e(doc.role)}</strong></div>`:''}<div><span>기술 · 주제</span><strong>${doc.tags.map(e).join(' · ')}</strong></div>${journey?`<div><span>경력 흐름</span><a class="context-link" href="${root}${journey.href}">${e(journey.title)} ${arrow}</a></div>`:''}</div></header><div class="article-grid"><aside class="article-toc"><p class="eyebrow">IN THIS STORY</p><nav aria-label="이 글의 목차">${doc.toc.filter(t=>t.level===2).map(t=>`<a href="#${t.id}">${e(t.title)}</a>`).join('')}</nav><p class="toc-note">경력 기록을 바탕으로 재구성했습니다.<br>실제 코드·로그를 가공해 만든 예시는 없습니다.</p></aside><article class="prose">${doc.html}<div class="article-end"><span>임재원 · Backend / Platform Engineer</span><a href="mailto:${profile.email}">이 경험에 대해 이야기 나누기 ${arrow}</a></div></article></div>${articleConnections(doc,docs,root)}</main>`});
+  const toc=doc.toc.filter(t=>t.level===2).map(t=>`<a href="#${t.id}">${e(t.title)}</a>`).join('');
+  return shell({seo:{publishedAt:doc.publishedAt,updatedAt:doc.updatedAt,...seo},title:doc.title,description:doc.summary,root,active:doc.kind==='notes'?'writing':'work',article:true,body:`<main id="main" class="article-page container"><div class="article-breadcrumb"><a href="${root}index.html">홈</a><span>/</span><a href="${root}${doc.kind==='cases'?'index.html#work':'writing/'}">${doc.kind==='cases'?'문제 해결 사례':'경험 노트'}</a></div><header class="article-header"><span class="eyebrow">${e(doc.category)} / ${doc.kind==='cases'?'CASE STUDY':'FIELD NOTE'}</span><h1>${e(doc.title)}</h1><p class="article-lead">${e(doc.summary)}</p>${articleDates(doc)}<div class="article-context">${doc.company?`<div><span>회사 · 수행 환경</span><strong>${e(doc.company)}</strong></div>`:''}${doc.project?`<div><span>프로젝트</span><strong>${e(doc.project)}</strong></div>`:''}<div><span>경험 시기</span><strong>${e(doc.period)}</strong></div>${doc.role?`<div><span>담당 범위</span><strong>${e(doc.role)}</strong></div>`:''}<div><span>기술 · 주제</span><strong>${doc.tags.map(e).join(' · ')}</strong></div>${journey?`<div><span>경력 흐름</span><a class="context-link" href="${root}${journey.href}">${e(journey.title)} ${arrow}</a></div>`:''}</div></header>${toc?`<details class="mobile-toc"><summary>이 글의 목차 <span>${doc.toc.filter(t=>t.level===2).length}개 섹션</span></summary><nav aria-label="모바일 글 목차">${toc}</nav></details>`:''}<div class="article-grid"><aside class="article-toc"><p class="eyebrow">IN THIS STORY</p><nav aria-label="이 글의 목차">${toc}</nav><p class="toc-note">경력 기록을 바탕으로 재구성했습니다.<br>실제 코드·로그를 가공해 만든 예시는 없습니다.</p></aside><article class="prose">${doc.html}<div class="article-end"><span>임재원 · Backend / Platform Engineer</span><a href="mailto:${profile.email}">이 경험에 대해 이야기 나누기 ${arrow}</a></div></article></div>${articleConnections(doc,docs,root)}</main>`});
 }
 
-export function writing(docs) {
+export function writing(docs,seo={}) {
   const notes=docs.filter(d=>d.kind==='notes');
-  return shell({title:'경험 노트',description:'백엔드·운영·자동화 경험에서 다음 설계의 기준을 찾는 임재원의 기록.',root:'../',active:'writing',body:`<main id="main" class="writing-page container"><header class="writing-header"><p class="eyebrow">FIELD NOTES</p><h1>한 번의 해결을,<br>다음의 기준으로.</h1><p>운영 중 만난 문제와 그 뒤에 남은 질문을 기록합니다.<br>완료한 경험과 앞으로 확인할 일을 구분해 씁니다.</p></header><section class="writing-journeys" aria-labelledby="journey-heading"><h2 id="journey-heading">경험의 흐름으로 읽기</h2>${journeyNavigation(docs,'../')}</section><form class="note-search" role="search"><label for="search">노트 검색</label><div><input id="search" type="search" placeholder="제목, 주제, 기술로 찾아보기" autocomplete="off"><span aria-hidden="true">⌕</span></div></form><div class="filter-row" role="group" aria-label="노트 분류"><button type="button" data-filter="all" aria-pressed="true">전체</button>${[...new Set(notes.map(n=>n.category))].map(c=>`<button type="button" data-filter="${e(c)}" aria-pressed="false">${e(c)}</button>`).join('')}<span id="search-count" aria-live="polite">${notes.length}개의 노트</span></div><div id="note-list">${notes.map(d=>noteRow(d,'../')).join('')}</div><p id="empty-state" hidden>검색 결과가 없습니다. 다른 단어나 분류를 선택해 주세요.</p><div class="writing-foot"><span class="eyebrow">CONTINUOUSLY WRITTEN</span><p>내용은 Markdown으로 관리합니다.<br>경험이 쌓이면, 기록도 함께 다듬어 갑니다.</p><a class="text-link" href="../feed.xml">RSS 구독 ${arrow}</a></div></main>`});
+  return shell({seo,title:'경험 노트',description:'백엔드·운영·자동화 경험에서 다음 설계의 기준을 찾는 임재원의 기록.',root:'../',active:'writing',body:`<main id="main" class="writing-page container"><header class="writing-header"><p class="eyebrow">FIELD NOTES</p><h1>한 번의 해결을,<br>다음의 기준으로.</h1><p>운영 중 만난 문제와 그 뒤에 남은 질문을 기록합니다.<br>완료한 경험과 앞으로 확인할 일을 구분해 씁니다.</p></header><section class="writing-journeys" aria-labelledby="journey-heading"><h2 id="journey-heading">경험의 흐름으로 읽기</h2>${journeyNavigation(docs,'../')}</section><form class="note-search" role="search"><label for="search">노트 검색</label><div><input id="search" type="search" placeholder="제목, 주제, 기술로 찾아보기" autocomplete="off"><span aria-hidden="true">⌕</span></div></form><div class="filter-row" role="group" aria-label="노트 분류"><button type="button" data-filter="all" aria-pressed="true">전체</button>${[...new Set(notes.map(n=>n.category))].map(c=>`<button type="button" data-filter="${e(c)}" aria-pressed="false">${e(c)}</button>`).join('')}<span id="search-count" aria-live="polite">${notes.length}개의 노트</span></div><div id="note-list">${notes.map(d=>noteRow(d,'../')).join('')}</div><p id="empty-state" hidden>검색 결과가 없습니다. 다른 단어나 분류를 선택해 주세요.</p><div class="writing-foot"><span class="eyebrow">CONTINUOUSLY WRITTEN</span><p>내용은 Markdown으로 관리합니다.<br>경험이 쌓이면, 기록도 함께 다듬어 갑니다.</p><a class="text-link" href="../feed.xml">RSS 구독 ${arrow}</a></div></main>`});
 }
 
-export function journeyPage(journey,docs) {
+export function journeyPage(journey,docs,seo={}) {
   const root='../../',index=journeys.findIndex(j=>j.id===journey.id);
   const connected=docs.filter(d=>!d.draft && d.journey===journey.id);
   const cases=connected.filter(d=>d.kind==='cases'),notes=connected.filter(d=>d.kind==='notes');
-  return shell({title:`${journey.title}의 경험`,description:journey.summary,root,active:'writing',body:`
+  return shell({seo,title:`${journey.title}의 경험`,description:journey.summary,root,active:'writing',body:`
 <main id="main" class="writing-page container">
   <div class="article-breadcrumb"><a href="${root}index.html">홈</a><span>/</span><a href="${root}writing/">경험 노트</a><span>/</span><span>${e(journey.title)}</span></div>
   <header class="writing-header"><p class="eyebrow">CAREER THREAD / 0${index+1}</p><h1>${e(journey.heading)}</h1><p>${e(journey.summary)}</p></header>

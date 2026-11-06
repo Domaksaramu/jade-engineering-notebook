@@ -11,6 +11,7 @@ result: "10GB → 3.5GB"
 scope: "기록된 Heap 사용량 비교 · 약 65% 감소"
 tags: ["Java", "Spring Security", "JVM", "Heap Dump"]
 order: 1
+publishedAt: "2026-11-06"
 draft: false
 ---
 ## 서버가 멈췄을 때, 먼저 본 것은 증설 가능성이 아니었습니다

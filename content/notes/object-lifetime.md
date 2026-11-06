@@ -10,6 +10,7 @@ relatedCases: ["auth-cache"]
 period: "2023 경험 · 2026 정리"
 tags: ["JVM", "운영 안정성"]
 order: 1
+publishedAt: "2026-11-06"
 draft: false
 ---
 ## 캐시는 데이터 구조이면서 수명 정책입니다

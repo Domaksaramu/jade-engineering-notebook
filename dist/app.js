@@ -18,3 +18,18 @@ for(const nav of document.querySelectorAll('.mobile-nav')) {
   nav.addEventListener('keydown',event=>{if(event.key==='Escape'){nav.open=false;nav.querySelector('summary').focus();}});
   for(const link of nav.querySelectorAll('a')) link.addEventListener('click',()=>{nav.open=false;});
 }
+
+for(const toc of document.querySelectorAll('.mobile-toc')) {
+  toc.addEventListener('keydown',event=>{if(event.key==='Escape'){toc.open=false;toc.querySelector('summary').focus();}});
+  for(const link of toc.querySelectorAll('a')) link.addEventListener('click',()=>{
+    toc.open=false;
+    const heading=document.getElementById(link.hash.slice(1));
+    if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
+  });
+}
+// Native overflow remains usable without JS; keyboard users can focus wide blocks.
+for(const block of document.querySelectorAll('.prose pre,.table-wrap')) {
+  block.tabIndex=0;
+  block.setAttribute('role','region');
+  block.setAttribute('aria-label',block.matches('pre')?'코드 또는 개념도. 긴 줄은 가로로 스크롤할 수 있습니다.':'표. 넓은 표는 가로로 스크롤할 수 있습니다.');
+}

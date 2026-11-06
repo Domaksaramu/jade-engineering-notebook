@@ -9,6 +9,7 @@ journey: "shared-foundation"
 period: "2022–2023 경험 · 2026 정리"
 tags: ["Java", "Spring", "외부기관 연동", "개발 환경"]
 order: 3
+publishedAt: "2026-11-06"
 draft: false
 ---
 ## 기능을 제공하는 것과, 확인할 수 있게 하는 것은 달랐습니다
