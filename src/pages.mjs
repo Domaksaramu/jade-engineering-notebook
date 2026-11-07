@@ -1,4 +1,4 @@
-import { escape as e } from './content.mjs';
+import { escape as e, publishedNotes } from './content.mjs';
 import { journeys, relatedDocuments } from './experience.mjs';
 import { seoTags } from './seo.mjs';
 
@@ -53,7 +53,7 @@ export function noteRow(note,root='') {
   return `<article class="note-row" data-note data-search="${e([note.title,note.summary,note.category,note.company||'',note.project||'',note.role||'',journeys.find(j=>j.id===note.journey)?.title||'',...note.tags].join(' ').toLowerCase())}" data-category="${e(note.category)}"><div class="note-meta"><span>${e(note.category)}</span><span>${e(note.period)}</span></div><div><h3><a href="${root}${note.href}">${e(note.title)} ${arrow}</a></h3>${note.project?`<p class="note-project">${e(note.company)} / ${e(note.project)}</p>`:''}<p>${e(note.summary)}</p>${tags(note.tags)}</div><span class="read-time">${note.publishedAt?`<time datetime="${e(note.publishedAt)}">${e(note.publishedAt.replaceAll('-','.'))} 발행</time>`:''}${note.minutes}분 읽기</span></article>`;
 }
 export function home(docs,seo={}) {
-  const cases=docs.filter(d=>d.kind==='cases'), notes=docs.filter(d=>d.kind==='notes');
+  const cases=docs.filter(d=>d.kind==='cases'), notes=publishedNotes(docs);
   const first=cases[0];
   return shell({seo,title:'시스템을 이해하고, 운영까지',description:'금융 백엔드에서 MLOps 플랫폼까지. 임재원의 경력과 기술적 판단을 기록하는 엔지니어링 노트북.',body:`
 <main id="main">
@@ -80,14 +80,14 @@ export function article(doc,docs,seo={}) {
 }
 
 export function writing(docs,seo={}) {
-  const notes=docs.filter(d=>d.kind==='notes');
+  const notes=publishedNotes(docs);
   return shell({seo,title:'경험 노트',description:'백엔드·운영·자동화 경험에서 다음 설계의 기준을 찾는 임재원의 기록.',root:'../',active:'writing',body:`<main id="main" class="writing-page container"><header class="writing-header"><p class="eyebrow">FIELD NOTES</p><h1>한 번의 해결을,<br>다음의 기준으로.</h1><p>운영 중 만난 문제와 그 뒤에 남은 질문을 기록합니다.<br>완료한 경험과 앞으로 확인할 일을 구분해 씁니다.</p></header><section class="writing-journeys" aria-labelledby="journey-heading"><h2 id="journey-heading">경험의 흐름으로 읽기</h2>${journeyNavigation(docs,'../')}</section><form class="note-search" role="search"><label for="search">노트 검색</label><div><input id="search" type="search" placeholder="제목, 주제, 기술로 찾아보기" autocomplete="off"><span aria-hidden="true">⌕</span></div></form><div class="filter-row" role="group" aria-label="노트 분류"><button type="button" data-filter="all" aria-pressed="true">전체</button>${[...new Set(notes.map(n=>n.category))].map(c=>`<button type="button" data-filter="${e(c)}" aria-pressed="false">${e(c)}</button>`).join('')}<span id="search-count" aria-live="polite">${notes.length}개의 노트</span></div><div id="note-list">${notes.map(d=>noteRow(d,'../')).join('')}</div><p id="empty-state" hidden>검색 결과가 없습니다. 다른 단어나 분류를 선택해 주세요.</p><div class="writing-foot"><span class="eyebrow">CONTINUOUSLY WRITTEN</span><p>내용은 Markdown으로 관리합니다.<br>경험이 쌓이면, 기록도 함께 다듬어 갑니다.</p><a class="text-link" href="../feed.xml">RSS 구독 ${arrow}</a></div></main>`});
 }
 
 export function journeyPage(journey,docs,seo={}) {
   const root='../../',index=journeys.findIndex(j=>j.id===journey.id);
   const connected=docs.filter(d=>!d.draft && d.journey===journey.id);
-  const cases=connected.filter(d=>d.kind==='cases'),notes=connected.filter(d=>d.kind==='notes');
+  const cases=connected.filter(d=>d.kind==='cases'),notes=publishedNotes(connected);
   return shell({seo,title:`${journey.title}의 경험`,description:journey.summary,root,active:'writing',body:`
 <main id="main" class="writing-page container">
   <div class="article-breadcrumb"><a href="${root}index.html">홈</a><span>/</span><a href="${root}writing/">경험 노트</a><span>/</span><span>${e(journey.title)}</span></div>
