@@ -5,6 +5,9 @@ import { journeys, validateConnections } from './experience.mjs';
 export const kinds = ['cases', 'notes'];
 export const validSlug = slug => typeof slug==='string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) && slug.length <= 80;
 export const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function publishedNotes(docs) {
+  return docs.filter(d=>d.kind==='notes'&&!d.draft).sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||'')||(a.order??99)-(b.order??99)||a.slug.localeCompare(b.slug));
+}
 export function safeUrl(value) {
   return /^(?:https?:\/\/|mailto:|#|\.\.?\/|\/[^/])/.test(value) && !/[\x00-\x20\\]/.test(value) ? value : '#';
 }

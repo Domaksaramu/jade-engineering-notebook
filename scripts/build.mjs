@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile, cp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { loadContent, escape as e } from '../src/content.mjs';
+import { loadContent, escape as e, publishedNotes } from '../src/content.mjs';
 import { home, article, writing, shell, journeyPage } from '../src/pages.mjs';
 import { journeys } from '../src/experience.mjs';
 import { createHash } from 'node:crypto';
@@ -53,7 +53,7 @@ export async function build({projectRoot=root, output=path.join(projectRoot,'dis
   await save('robots.txt',`User-agent: *\nDisallow: ${prefix}studio/\nSitemap: ${origin}/sitemap.xml\n`);
   // Relative URLs preserve portability between an origin and GitHub project Pages.
   const link=origin||'.';
-  await save('feed.xml',`<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel><title>임재원의 경험 노트</title><link>${e(link)}/</link><description>경험에서 다음 설계의 기준을 찾습니다.</description><language>ko</language>${docs.filter(d=>d.kind==='notes').map(d=>`<item><title>${e(d.title)}</title><link>${e(link)}/${d.href}</link><guid isPermaLink="false">jaewon:${e(d.slug)}</guid><description>${e(d.summary)}</description>${d.publishedAt?`<pubDate>${new Date(d.publishedAt).toUTCString()}</pubDate>`:''}</item>`).join('')}</channel></rss>`);
+  await save('feed.xml',`<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel><title>임재원의 경험 노트</title><link>${e(link)}/</link><description>경험에서 다음 설계의 기준을 찾습니다.</description><language>ko</language>${publishedNotes(docs).map(d=>`<item><title>${e(d.title)}</title><link>${e(link)}/${d.href}</link><guid isPermaLink="false">jaewon:${e(d.slug)}</guid><description>${e(d.summary)}</description>${d.publishedAt?`<pubDate>${new Date(d.publishedAt).toUTCString()}</pubDate>`:''}</item>`).join('')}</channel></rss>`);
   if(origin) await save('sitemap.xml',`<?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['','writing/',...journeys.map(j=>j.href),...docs.map(d=>d.href)].map(p=>{const doc=docs.find(d=>d.href===p),date=doc?.updatedAt||doc?.publishedAt;return `<url><loc>${e(origin)}/${p}</loc>${date?`<lastmod>${date}</lastmod>`:''}</url>`;}).join('')}</urlset>`);
   await save('content-index.json',JSON.stringify(docs.map(({title,summary,kind,slug,category,tags,href})=>({title,summary,kind,slug,category,tags,href})),null,2));
   console.log(`Built ${docs.length+3+journeys.length} HTML pages · ${docs.length} published documents`);
